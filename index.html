@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- =====================================================
+       META & SEO
+       ===================================================== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Hackwarts – Where Magic Meets Code. The ultimate Harry Potter-themed hackathon at RKGIT, Ghaziabad." />
+  <meta name="theme-color" content="#06050e" />
+  <title>Hackwarts | Where Magic Meets Code</title>
+
+  <!-- =====================================================
+       GOOGLE FONTS
+       Cinzel Decorative → hero title (Hackwarts wordmark)
+       Cinzel           → section headings, logo, stat numbers
+       Raleway          → body text (set as font-family on <body>)
+       ===================================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Cinzel:wght@400;600;700&family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- =====================================================
+       STYLESHEET
+       All visual styles live in style.css.
+       See the Table of Contents at the top of that file.
+       ===================================================== -->
+  <link rel="stylesheet" href="style.css" />
+
+
+</head>
+
+<body>
+
+  <!-- ==================================================
+       CURSOR GLOW
+       A golden glowing circle that follows the mouse.
+       Positioned/animated entirely via JavaScript (script.js §2).
+       Hidden on touch devices via CSS media query.
+       ================================================== -->
+  <div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+
+
+  <!-- ==================================================
+       NAVBAR
+       Fixed top bar. Becomes darker + blurred after
+       scrolling 60 px (JS adds class .scrolled — see script.js §3).
+       ================================================== -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+
+      <!-- Logo: lightning bolt emoji + wordmark -->
+      <a href="#home" class="nav-logo" aria-label="Hackwarts Home">
+        <span class="logo-sigil">⚡</span>
+        <span class="logo-text">Hackwarts</span>
+      </a>
+
+      <!-- Navigation links -->
+      <!-- Note: .nav-link elements get a sparkle sound on click (script.js §11) -->
+      <div class="nav-links" id="navLinks">
+        <a href="#home"    class="nav-link">Home</a>
+        <a href="#stages"  class="nav-link">Stages</a>
+        <a href="#sponsor" class="nav-link">Sponsors</a>
+
+        <!-- NEW: Contact Us added to navbar -->
+        <a href="#contact-us" class="nav-link">Contact</a>
+
+        <!-- Primary CTA button — links to Unstop registration page -->
+        <a
+          href="https://unstop.com/p/hackwarts-raj-kumar-goel-institute-of-technology-rkgit-ghaziabad-1661641?lb=EyURoZiT&utm_medium=Share&utm_source=WhatsApp"
+          class="btn-register"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Register for Hackwarts on Unstop"
+        >
+          <span class="btn-register-text">Register</span>
+          <!-- Shimmer overlay — scales in from left on hover -->
+          <span class="btn-register-shimmer" aria-hidden="true"></span>
+        </a>
+      </div>
+
+    </div>
+  </nav><!-- /navbar -->
+
+
+  <!-- ==================================================
+       HERO SECTION
+       Full-viewport landing area with:
+         • Layered radial-gradient background
+         • Twinkling star-field (CSS animation)
+         • Fog drift (CSS animation)
+         • SVG castle silhouette
+         • Headline, subtitle, CTA buttons
+         • Three-stat summary bar
+         • "Scroll" hint arrow at the bottom
+       ================================================== -->
+  <section class="hero" id="home" aria-label="Hero">
+
+    <!-- Background layers (all position:absolute, z-index 1–2) -->
+    <div class="hero-bg">
+      <div class="hero-stars"></div>    <!-- twinkling dots -->
+      <div class="hero-overlay"></div>  <!-- gradient fade to black at bottom -->
+      <div class="hero-fog fog-1"></div><!-- drifting gold fog -->
+      <div class="hero-fog fog-2"></div><!-- second fog layer, offset -->
+    </div>
+
+    <!-- -----------------------------------------------
+         CASTLE SILHOUETTE (inline SVG)
+         Built entirely from <rect> and <polygon> shapes.
+         White fill at 15% opacity so it blends magically
+         with the dark background.
+         ----------------------------------------------- -->
+    <svg
+      class="castle-silhouette"
+      viewBox="0 0 900 320"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <!-- Central main tower body -->
+      <rect x="330" y="120" width="240" height="200" fill="white" />
+
+      <!-- Crenellations (battlements) across the main tower top -->
+      <rect x="330" y="108" width="20" height="20" fill="white" />
+      <rect x="360" y="108" width="20" height="20" fill="white" />
+      <rect x="390" y="108" width="20" height="20" fill="white" />
+      <rect x="420" y="108" width="20" height="20" fill="white" />
+      <rect x="450" y="108" width="20" height="20" fill="white" />
+      <rect x="480" y="108" width="20" height="20" fill="white" />
+      <rect x="510" y="108" width="20" height="20" fill="white" />
+      <rect x="540" y="108" width="20" height="20" fill="white" />
+
+      <!-- Left wing tower body -->
+      <rect x="240" y="160" width="100" height="160" fill="white" />
+      <!-- Left wing crenellations -->
+      <rect x="240" y="148" width="16" height="16" fill="white" />
+      <rect x="262" y="148" width="16" height="16" fill="white" />
+      <rect x="284" y="148" width="16" height="16" fill="white" />
+      <rect x="306" y="148" width="16" height="16" fill="white" />
+
+      <!-- Right wing tower body -->
+      <rect x="560" y="160" width="100" height="160" fill="white" />
+      <!-- Right wing crenellations -->
+      <rect x="560" y="148" width="16" height="16" fill="white" />
+      <rect x="582" y="148" width="16" height="16" fill="white" />
+      <rect x="604" y="148" width="16" height="16" fill="white" />
+      <rect x="626" y="148" width="16" height="16" fill="white" />
+
+      <!-- Far-left small tower -->
+      <rect x="130" y="200" width="80" height="120" fill="white" />
+      <polygon points="130,200 170,155 210,200" fill="white" /> <!-- pointed roof -->
+
+      <!-- Far-right small tower -->
+      <rect x="690" y="200" width="80" height="120" fill="white" />
+      <polygon points="690,200 730,155 770,200" fill="white" /> <!-- pointed roof -->
+
+      <!-- Main tower conical spires -->
+      <polygon points="330,120 360,50 390,120" fill="white" />
+      <polygon points="510,120 540,50 570,120" fill="white" />
+
+      <!-- Side-tower spires (slightly transparent for depth) -->
+      <polygon points="240,160 290,90 340,160" fill="white" opacity="0.7" />
+      <polygon points="560,160 610,90 660,160" fill="white" opacity="0.7" />
+
+      <!-- Windows / arches (dark cut-outs using background colour) -->
+      <rect x="430" y="150" width="40" height="55" rx="20" fill="#06050e" /> <!-- large central arch -->
+      <rect x="390" y="200" width="28" height="36" rx="14" fill="#06050e" />
+      <rect x="480" y="200" width="28" height="36" rx="14" fill="#06050e" />
+      <rect x="270" y="190" width="22" height="30" rx="11" fill="#06050e" />
+      <rect x="608" y="190" width="22" height="30" rx="11" fill="#06050e" />
+
+      <!-- Ground baseline -->
+      <rect x="0" y="310" width="900" height="10" fill="white" />
+    </svg><!-- /castle-silhouette -->
+
+
+    <!-- Hero text content — z-index 10, above all bg layers -->
+    <div class="hero-content">
+
+      <!-- Small accent label above title -->
+      <p class="hero-eyebrow reveal-text" style="animation-delay: 0s;">
+        ✦ A Hackathon Like No Other ✦
+      </p>
+
+      <!-- Main title — uses Cinzel Decorative (largest text on page) -->
+      <h1 class="hero-title reveal-text" style="animation-delay: 0.2s;">
+        Hackwarts
+      </h1>
+
+      <!-- Tagline -->
+      <p class="hero-subtitle reveal-text" style="animation-delay: 0.45s;">
+        Where Magic Meets Code
+      </p>
+
+      <!-- Short description -->
+      <p class="hero-desc reveal-text" style="animation-delay: 0.65s;">
+        Step through the enchanted gates. Cast your most powerful code spell.<br />
+        Prove you are worthy of the Wizard's Crown.
+      </p>
+
+      <!-- CTA buttons row -->
+      <div class="hero-actions reveal-text" style="animation-delay: 0.85s;">
+
+        <!-- Primary: Register on Unstop -->
+        <a
+          href="https://unstop.com/p/hackwarts-raj-kumar-goel-institute-of-technology-rkgit-ghaziabad-1661641?lb=EyURoZiT&utm_medium=Share&utm_source=WhatsApp"
+          class="btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>Register Now</span>
+          <!-- Arrow icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+
+        <!-- Secondary: scroll down to stages -->
+        <a href="#stages" class="btn-secondary">Learn More</a>
+
+      </div><!-- /hero-actions -->
+
+      <!-- Stats bar: three key numbers separated by dividers -->
+      <div class="hero-stats reveal-text" style="animation-delay: 1.05s;">
+
+        <!-- Stat 1: Participant count -->
+        <div class="stat">
+          <span class="stat-num">500</span><span class="stat-plus">+</span>
+          <span class="stat-label">Wizards</span>
+        </div>
+
+        <div class="stat-divider" aria-hidden="true"></div>
+
+        <!-- Stat 2: Format -->
+        <div class="stat">
+          <span class="stat-num" style="font-size: clamp(1rem, 2.2vw, 1.5rem); letter-spacing: 0.03em; line-height: 1.1;">
+            Hack<br />Marathon
+          </span>
+          <span class="stat-label">Challenge</span>
+        </div>
+
+        <div class="stat-divider" aria-hidden="true"></div>
+
+        <!-- Stat 3: Prize pool -->
+        <div class="stat">
+          <span class="stat-num">1,00,000</span><span class="stat-plus">₹</span>
+          <span class="stat-label">in Prizes</span>
+        </div>
+
+      </div><!-- /hero-stats -->
+
+    </div><!-- /hero-content -->
+
+    <!-- Scroll-down hint (animated line) -->
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+
+  </section><!-- /hero -->
+
+
+  <!-- ==================================================
+       ABOUT SECTION
+       Two-column layout: descriptive text + four info cards.
+       ================================================== -->
+  <section class="about section" id="about" aria-labelledby="about-heading">
+    <div class="container">
+
+      <div class="section-label scroll-reveal">✦ The Lore ✦</div>
+      <h2 class="section-title scroll-reveal" id="about-heading">What is Hackwarts?</h2>
+
+      <div class="about-grid">
+
+        <!-- Left: long-form description -->
+        <div class="about-text scroll-reveal">
+          <p class="about-lead">
+            Born at the crossroads of ancient wizardry and cutting-edge technology,
+            Hackwarts is not just a hackathon — it is an <em>ordeal</em>.
+          </p>
+          <p>
+            Teams of brilliant minds step into four legendary Houses of Challenge,
+            each demanding mastery over a different domain of magic: data, design,
+            deployment, and disruption. Through a relentless Hack Marathon,
+            competitors forge solutions that matter — powered by caffeine, creativity,
+            and a dash of dark magic.
+          </p>
+          <p>
+            Mentored by industry Headmasters, judged by a council of Archmages,
+            and witnessed by hundreds of spellbound spectators — Hackwarts crowns
+            only those who dare.
+          </p>
+          <a href="#stages" class="link-arrow">View the Stages <span>→</span></a>
+        </div>
+
+        <!-- Right: 2×2 feature card grid -->
+        <div class="about-cards">
+          <div class="about-card scroll-reveal" style="animation-delay: 0.1s;">
+            <div class="card-icon">🧙</div>
+            <h3>Expert Mentors</h3>
+            <p>Get guided by industry veterans who are headmasters in their craft.</p>
+          </div>
+          <div class="about-card scroll-reveal" style="animation-delay: 0.2s;">
+            <div class="card-icon">🏆</div>
+            <h3>Grand Prizes</h3>
+            <p>Win glory, swag, internships, and a mountain of magical gold.</p>
+          </div>
+          <div class="about-card scroll-reveal" style="animation-delay: 0.3s;">
+            <div class="card-icon">🌐</div>
+            <h3>Open to All</h3>
+            <p>Students from every house (college) across the country are welcome.</p>
+          </div>
+          <div class="about-card scroll-reveal" style="animation-delay: 0.4s;">
+            <div class="card-icon">⚡</div>
+            <h3>Hack Marathon</h3>
+            <p>Two days of pure building, breaking, and brilliant sorcery.</p>
+          </div>
+        </div><!-- /about-cards -->
+
+      </div><!-- /about-grid -->
+
+    </div><!-- /container -->
+  </section><!-- /about -->
+
+
+  <!-- ==================================================
+       STAGES / TIMELINE SECTION
+       Vertical timeline with four numbered stages.
+       ================================================== -->
+  <section class="stages section" id="stages" aria-labelledby="stages-heading">
+    <div class="container">
+
+      <div class="section-label scroll-reveal" style="text-align: center;">✦ The Trials ✦</div>
+      <h2 class="section-title scroll-reveal" id="stages-heading" style="text-align: center;">Path of the Chosen</h2>
+      <p class="section-sub scroll-reveal" style="text-align: center;">
+        Every great wizard must pass through four trials. Here is yours.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-track" aria-hidden="true"></div>
+
+        <!-- Stage 1: Registration -->
+        <div class="stage-item scroll-reveal" style="animation-delay: 0s;">
+          <div class="stage-node">
+            <span class="stage-num">01</span>
+            <div class="stage-pulse" aria-hidden="true"></div>
+          </div>
+          <div class="stage-card">
+            <div class="stage-icon">📜</div>
+            <h3 class="stage-title">Registration</h3>
+            <p class="stage-desc">
+              Open your acceptance letter. Form your team of up to 4 wizards.
+              Declare your domain of magic and confirm your enrollment before
+              the gates close.
+            </p>
+            <div class="stage-badge">Open Now</div>
+          </div>
+        </div>
+
+        <!-- Stage 2: PPT Submission -->
+        <div class="stage-item scroll-reveal" style="animation-delay: 0.15s;">
+          <div class="stage-node">
+            <span class="stage-num">02</span>
+            <div class="stage-pulse" aria-hidden="true"></div>
+          </div>
+          <div class="stage-card">
+            <div class="stage-icon">🔮</div>
+            <h3 class="stage-title">PPT Submission &amp; Selection</h3>
+            <p class="stage-desc">
+              Submit your enchanted slide deck detailing your idea. The Grand
+              Council will review and select the most promising spells for
+              the next round.
+            </p>
+            <div class="stage-badge upcoming">Upcoming</div>
+          </div>
+        </div>
+
+        <!-- Stage 3: Online Round -->
+        <div class="stage-item scroll-reveal" style="animation-delay: 0.3s;">
+          <div class="stage-node">
+            <span class="stage-num">03</span>
+            <div class="stage-pulse" aria-hidden="true"></div>
+          </div>
+          <div class="stage-card">
+            <div class="stage-icon">💻</div>
+            <h3 class="stage-title">Online Round</h3>
+            <p class="stage-desc">
+              Selected teams engage in a remote coding duel. Demonstrate your
+              working prototype and defend your magical solution before a
+              panel of Archmages.
+            </p>
+            <div class="stage-badge upcoming">Upcoming</div>
+          </div>
+        </div>
+
+        <!-- Stage 4: Grand Finale -->
+        <div class="stage-item scroll-reveal" style="animation-delay: 0.45s;">
+          <div class="stage-node stage-node--final">
+            <span class="stage-num">04</span>
+            <div class="stage-pulse" aria-hidden="true"></div>
+          </div>
+          <div class="stage-card stage-card--final">
+            <div class="stage-icon">🏰</div>
+            <h3 class="stage-title">Offline Grand Finale</h3>
+            <p class="stage-desc">
+              Enter the Great Hall. A full Hack Marathon of live hacking,
+              mentorship, and magic culminating in a grand presentation
+              before sponsors, alumni, and the entire wizarding world.
+            </p>
+            <div class="stage-badge finale">Grand Finale</div>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+
+    </div><!-- /container -->
+  </section><!-- /stages -->
+
+
+  <!-- ==================================================
+       SPONSOR SECTION
+       4-column grid of sponsor cards.
+       ================================================== -->
+  <section class="sponsor section" id="sponsor" aria-labelledby="sponsor-heading">
+    <div class="container">
+
+      <div class="section-label scroll-reveal" style="text-align: center;">✦ Patrons of the Arts ✦</div>
+      <h2 class="section-title scroll-reveal" id="sponsor-heading" style="text-align: center;">Our Sponsors</h2>
+      <p class="section-sub scroll-reveal" style="text-align: center;">
+        The great guilds that power the magic behind Hackwarts.
+      </p>
+
+      <div class="sponsor-grid">
+
+        <!-- Sponsor 1: GeeksForGeeks (Gold) — real logo + SVG fallback if URL fails -->
+        <!-- TO SWAP LOGO: change the src URL on the <img> below -->
+        <div class="sponsor-card scroll-reveal" style="animation-delay: 0s;">
+          <div class="sponsor-logo-wrap">
+            <img
+              src="https://media.geeksforgeeks.org/wp-content/uploads/20210511160813/g4g.jpg"
+              alt="GeeksForGeeks"
+              style="width:130px; height:60px; object-fit:contain; border-radius:6px; display:block; background:#fff;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <svg viewBox="0 0 130 50" xmlns="http://www.w3.org/2000/svg" style="display:none;width:130px;height:50px;">
+              <rect width="130" height="50" rx="6" fill="#2F8D46"/>
+              <text x="65" y="20" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="13" fill="white">GeeksforGeeks</text>
+              <text x="65" y="36" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="white">A COMPUTER SCIENCE PORTAL</text>
+            </svg>
+          </div>
+          <p class="sponsor-name">GeeksForGeeks</p>
+          <span class="sponsor-tier gold-tier">Gold Patron</span>
+        </div>
+
+        <!-- Sponsor 2: Unstop (Gold) — real logo + SVG fallback if URL fails -->
+        <!-- TO SWAP LOGO: change the src URL on the <img> below -->
+        <div class="sponsor-card scroll-reveal" style="animation-delay: 0.1s;">
+          <div class="sponsor-logo-wrap">
+            <img
+              src="https://d8it4huxumps7.cloudfront.net/uploads/images/unstop/branding-guidelines/logos/blue/Unstop-Logo-Blue-Medium.jpg"
+              alt="Unstop"
+              style="width:130px; height:60px; object-fit:contain; border-radius:6px; display:block; background:#fff;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <svg viewBox="0 0 130 50" xmlns="http://www.w3.org/2000/svg" style="display:none;width:130px;height:50px;">
+              <rect width="130" height="50" rx="6" fill="#1956F6"/>
+              <text x="65" y="32" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="20" fill="white" letter-spacing="1">Unstop</text>
+            </svg>
+          </div>
+          <p class="sponsor-name">Unstop</p>
+          <span class="sponsor-tier gold-tier">Gold Patron</span>
+        </div>
+
+        <!-- Sponsor 3: Placeholder (Silver) — replace ◈ with real logo when available -->
+        <div class="sponsor-card scroll-reveal" style="animation-delay: 0.2s;">
+          <div class="sponsor-logo-wrap">
+            <div class="sponsor-placeholder" aria-label="Sponsor placeholder">◈</div>
+          </div>
+          <p class="sponsor-name">Sponsor Three</p>
+          <span class="sponsor-tier silver-tier">Silver Patron</span>
+        </div>
+
+        <!-- Sponsor 4: Placeholder (Bronze) — replace ◈ with real logo when available -->
+        <div class="sponsor-card scroll-reveal" style="animation-delay: 0.3s;">
+          <div class="sponsor-logo-wrap">
+            <div class="sponsor-placeholder" aria-label="Sponsor placeholder">◈</div>
+          </div>
+          <p class="sponsor-name">Sponsor Four</p>
+          <span class="sponsor-tier bronze-tier">Bronze Patron</span>
+        </div>
+
+      </div><!-- /sponsor-grid -->
+
+      <!-- "Become a Patron" — clicking opens email to thefamoussrivastava@gmail.com -->
+      <!-- TO CHANGE EMAIL: edit the mailto: address below -->
+      <div class="sponsor-cta scroll-reveal">
+        <p>Interested in sponsoring Hackwarts?</p>
+        <a href="mailto:thefamoussrivastava@gmail.com" class="btn-outline">Become a Patron</a>
+      </div>
+
+    </div><!-- /container -->
+  </section><!-- /sponsor -->
+
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       CONTACT US SECTION
+       ════════════════════════════════════════════════════════════
+       LOCATION : Below the Sponsor section, above the Footer.
+       CONTAINS :
+         • Animated section header (eyebrow + title + subtitle)
+         • Three social media cards — WhatsApp, LinkedIn, Instagram
+         • Each card = a full clickable <a> link (opens new tab)
+         • Floating golden sparkle particles (pure CSS, no JS)
+         • Bottom tagline with rocking owl emoji
+         • Staggered fade-up reveal animation (JS IntersectionObserver)
+
+       ── HOW TO CHANGE THE LINKS ──────────────────────────────
+         1. Find the card you want (search for data-platform="...")
+         2. Change the href="..." value to your new URL
+         That's it — the whole card is the link.
+
+       ── HOW TO ADD A NEW CARD ────────────────────────────────
+         Copy one of the <a class="cu-card"> blocks below,
+         paste it inside <div class="cu-grid">,
+         change the href, icon SVG, title, description, and
+         the class name (whatsapp / linkedin / instagram / custom).
+         Then add a matching hover color rule in the <style> block.
+
+       ── HOW TO CHANGE CARD COLORS ────────────────────────────
+         Search for ".cu-card.whatsapp:hover" etc. in the <style>
+         block below and change the border-color / box-shadow values.
+       ════════════════════════════════════════════════════════════ -->
+
+  <!-- ── CONTACT US — STYLES ───────────────────────────────────
+       All CSS for this section is scoped here so you can find
+       and edit it in one place without touching style.css.
+       ─────────────────────────────────────────────────────────── -->
+  <style>
+
+    /* ═══════════════════════════════════════════════════════
+       SECTION WRAPPER
+       position:relative → needed for absolutely-positioned sparkles
+       overflow:hidden   → clips sparkles at the section edge
+       ═══════════════════════════════════════════════════════ */
+    .cu-section {
+      padding: 7rem 1rem 6rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, transparent 0%, rgba(107,63,160,0.04) 50%, transparent 100%);
+    }
+
+    /* Deep purple radial glow in the background — purely decorative */
+    .cu-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(107,63,160,0.1) 0%, transparent 70%);
+      pointer-events: none; /* never blocks clicks */
+      z-index: 0;
+    }
+
+    /* ─── SECTION HEADER ────────────────────────────────────
+       Same visual style as other sections (uses .section-label
+       and .section-title defined in the main <style> block above).
+       All header children have .cu-reveal — they start hidden and
+       animate in when the section enters the viewport (JS below).
+       ──────────────────────────────────────────────────────── */
+    .cu-header {
+      text-align: center;
+      position: relative;
+      z-index: 2; /* above ::before glow */
+      margin-bottom: 3rem;
+    }
+
+    /* Subtitle paragraph under the main title */
+    .cu-subtitle {
+      color: #9896a8;     /* --clr-text-dim */
+      max-width: 480px;
+      margin: 0 auto;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    /* Short golden divider line between subtitle and cards */
+    .cu-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #d4af37, transparent);
+      margin: 1.5rem auto 0;
+      border: none;
+    }
+
+    /* ─── CARDS GRID ────────────────────────────────────────
+       Three equal columns on desktop.
+       → 2 columns on tablet  (breakpoint: 900px)
+       → 1 column  on mobile  (breakpoint: 640px)
+       max-width keeps the grid centered and not too wide.
+       ──────────────────────────────────────────────────────── */
+    .cu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    @media (max-width: 900px) {
+      .cu-grid { grid-template-columns: repeat(2, 1fr); max-width: 600px; }
+    }
+    @media (max-width: 640px) {
+      .cu-grid { grid-template-columns: 1fr; max-width: 380px; }
+    }
+
+    /* ─── INDIVIDUAL CARD ───────────────────────────────────
+       <a> element = entire card is one big link.
+       Starts invisible (opacity:0) + shifted down (translateY 50px).
+       When JS adds .cu-card-in, it transitions to full opacity
+       at its natural position — this creates the float-up reveal.
+
+       The 4 transition properties handle:
+         • opacity / transform → reveal animation (slow, smooth)
+         • box-shadow          → hover glow (fast)
+         • border-color        → hover border (fast)
+       ──────────────────────────────────────────────────────── */
+    .cu-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2.75rem 1.75rem 2rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(212,175,55,0.18);
+      border-radius: 20px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+
+      /* Reveal animation: start hidden + shifted down */
+      opacity: 0;
+      transform: translateY(50px);
+
+      /* Transition order matters: reveal first, then hover micro-interactions */
+      transition:
+        opacity    0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        transform  0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.3s  ease,
+        border-color 0.3s ease;
+    }
+
+    /* JS adds this class → card animates into visible position */
+    .cu-card.cu-card-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── SHIMMER SWEEP ─────────────────────────────────────
+       A diagonal light strip that sweeps left→right on hover.
+       Uses a skewed ::before pseudo-element.
+       starts off-screen left (left:-80%), ends off-screen right (left:150%).
+       ──────────────────────────────────────────────────────── */
+    .cu-card::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -80%;         /* starts off-screen left */
+      width: 55%;
+      height: 220%;
+      background: linear-gradient(
+        110deg,
+        transparent     0%,
+        rgba(212,175,55,0.07) 50%,
+        transparent    100%
+      );
+      transform: skewX(-15deg);
+      transition: left 0.65s ease; /* speed of the sweep */
+      pointer-events: none;
+    }
+    .cu-card:hover::before {
+      left: 150%;         /* sweeps off-screen right on hover */
+    }
+
+    /* ─── CARD HOVER LIFT ───────────────────────────────────
+       Default hover (gold glow). Platform-specific overrides below.
+       ──────────────────────────────────────────────────────── */
+    .cu-card:hover {
+      transform: translateY(-10px) !important; /* override the reveal transform */
+      border-color: rgba(212,175,55,0.5);
+      box-shadow: 0 24px 48px rgba(212,175,55,0.12);
+    }
+
+    /* ─── PLATFORM HOVER COLORS ─────────────────────────────
+       Each platform gets its brand color as the glow.
+       TO CHANGE: edit the rgba() values in box-shadow / border-color.
+         WhatsApp green  : rgba(37, 211, 102, ...)
+         LinkedIn blue   : rgba(10, 102, 194, ...)
+         Instagram pink  : rgba(228, 64, 95, ...)
+       ──────────────────────────────────────────────────────── */
+    .cu-card.whatsapp:hover {
+      border-color: rgba(37,211,102,0.55);
+      box-shadow: 0 24px 48px rgba(37,211,102,0.18), 0 0 0 1px rgba(37,211,102,0.08);
+    }
+    .cu-card.linkedin:hover {
+      border-color: rgba(10,102,194,0.55);
+      box-shadow: 0 24px 48px rgba(10,102,194,0.18), 0 0 0 1px rgba(10,102,194,0.08);
+    }
+    .cu-card.instagram:hover {
+      border-color: rgba(228,64,95,0.55);
+      box-shadow: 0 24px 48px rgba(228,64,95,0.18), 0 0 0 1px rgba(228,64,95,0.08);
+    }
+
+    /* ─── ICON CIRCLE ───────────────────────────────────────
+       Circular container for the SVG brand icon.
+       Scales + rotates slightly on hover via parent .cu-card:hover.
+       The breathing pulse animation draws gentle attention.
+       ──────────────────────────────────────────────────────── */
+    .cu-icon-ring {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* springy */
+      /* Breathing pulse — draws eye without being distracting */
+      animation: cu-breathe 3.5s ease-in-out infinite;
+    }
+    .cu-card:hover .cu-icon-ring {
+      /* spring scale + slight clockwise rotation on hover */
+      transform: scale(1.18) rotate(6deg);
+    }
+    /* Slightly stagger each card's pulse so they don't all pulse together */
+    .cu-card:nth-child(2) .cu-icon-ring { animation-delay: 0.6s; }
+    .cu-card:nth-child(3) .cu-icon-ring { animation-delay: 1.2s; }
+
+    /* Subtle radial shadow pulse */
+    @keyframes cu-breathe {
+      0%,100% { box-shadow: 0 0 0  0px rgba(212,175,55,0); }
+      50%      { box-shadow: 0 0 0 10px rgba(212,175,55,0.07); }
+    }
+
+    /* Platform-specific icon ring background colors */
+    .cu-card.whatsapp  .cu-icon-ring { background: rgba(37,211,102,0.12); }
+    .cu-card.linkedin  .cu-icon-ring { background: rgba(10,102,194,0.12); }
+    .cu-card.instagram .cu-icon-ring { background: rgba(228,64,95,0.1); }
+
+    /* SVG icon inside the ring */
+    .cu-icon-ring svg { width: 38px; height: 38px; }
+
+    /* ─── CARD TITLE & DESCRIPTION ──────────────────────────
+       Uses the page's existing font variables.
+       ──────────────────────────────────────────────────────── */
+    .cu-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #e0dfe8;           /* --clr-text */
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.04em;
+    }
+    .cu-card-desc {
+      font-size: 0.9rem;
+      color: #9896a8;           /* --clr-text-dim */
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;             /* pushes button to the bottom */
+    }
+
+    /* ─── JOIN BUTTON ───────────────────────────────────────
+       A pill-shaped "button" at the bottom of each card.
+       This is a <span> inside the <a> card — not a real <button>.
+       On card hover, it fills with the platform's brand color.
+       ──────────────────────────────────────────────────────── */
+    .cu-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1.4rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border: 1.5px solid;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+    /* Platform button colors (resting state) */
+    .cu-card.whatsapp  .cu-btn { color: #25d366; border-color: rgba(37,211,102,0.4); }
+    .cu-card.linkedin  .cu-btn { color: #4a9fd4; border-color: rgba(10,102,194,0.4); }
+    .cu-card.instagram .cu-btn { color: #e4405f; border-color: rgba(228,64,95,0.4); }
+    /* Platform button colors (hover state — filled) */
+    .cu-card.whatsapp:hover  .cu-btn { background: #25d366; color: #06050e; border-color: #25d366; }
+    .cu-card.linkedin:hover  .cu-btn { background: #0a66c2; color: #fff;    border-color: #0a66c2; }
+    .cu-card.instagram:hover .cu-btn {
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    /* Arrow icon inside button */
+    .cu-btn svg { transition: transform 0.2s ease; }
+    .cu-card:hover .cu-btn svg { transform: translate(3px, -3px); }
+
+    /* ─── FLOATING SPARKLE PARTICLES ───────────────────────
+       Tiny golden dots that float upward through the section.
+       Each .cu-sparkle <div> is positioned absolutely.
+       TO ADD MORE: copy a <div class="cu-sparkle"> and change
+       the inline left%, bottom%, width/height, and animation values.
+       ──────────────────────────────────────────────────────── */
+    .cu-sparkle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.65) 0%, transparent 70%);
+      pointer-events: none;
+      animation: cu-float linear infinite;
+      z-index: 1;
+    }
+    @keyframes cu-float {
+      0%   { transform: translateY(0)   scale(1);    opacity: 0.7; }
+      40%  { opacity: 0.4; }
+      100% { transform: translateY(-130px) scale(0); opacity: 0; }
+    }
+
+    /* ─── BOTTOM TAGLINE ────────────────────────────────────
+       A short line below the cards.
+       Starts invisible (.cu-reveal), animated in by JS.
+       The owl emoji rocks side-to-side via @keyframes cu-rock.
+       ──────────────────────────────────────────────────────── */
+    .cu-tagline {
+      text-align: center;
+      margin-top: 3.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .cu-tagline p {
+      color: #9896a8;
+      font-size: 0.95rem;
+      letter-spacing: 0.07em;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    /* JS adds this class to reveal the tagline */
+    .cu-tagline p.cu-card-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Rocking owl */
+    .cu-owl {
+      display: inline-block;
+      animation: cu-rock 4s ease-in-out infinite;
+    }
+    @keyframes cu-rock {
+      0%,100% { transform: rotate(-10deg); }
+      50%      { transform: rotate(10deg);  }
+    }
+
+    /* ─── REVEAL HELPER ─────────────────────────────────────
+       .cu-reveal = starting state (hidden + shifted down).
+       Used on the header children (label, title, subtitle, divider).
+       JS adds .cu-card-in when the section enters the viewport.
+       ──────────────────────────────────────────────────────── */
+    .cu-reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .cu-reveal.cu-card-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  </style>
+
+  <!-- ── CONTACT US — HTML ──────────────────────────────────── -->
+  <section class="cu-section" id="contact-us" aria-labelledby="cu-heading">
+
+    <!-- ── 6 FLOATING SPARKLE DOTS ─────────────────────────────
+         Each dot: position (left/bottom), size (width/height),
+         speed (animation-duration), start delay (animation-delay).
+         They drift upward and fade out — pure CSS, zero JS.
+         ─────────────────────────────────────────────────────── -->
+    <!-- Sparkle A: left side, small, slow -->
+    <div class="cu-sparkle" style="left:6%;  bottom:12%; width:7px;  height:7px;  animation-duration:6.5s; animation-delay:0s;"></div>
+    <!-- Sparkle B: center-left, tiny, medium speed -->
+    <div class="cu-sparkle" style="left:20%; bottom:28%; width:4px;  height:4px;  animation-duration:8s;   animation-delay:1.8s;"></div>
+    <!-- Sparkle C: center-right, medium, fast -->
+    <div class="cu-sparkle" style="left:58%; bottom:8%;  width:9px;  height:9px;  animation-duration:5.5s; animation-delay:0.6s;"></div>
+    <!-- Sparkle D: right side, tiny -->
+    <div class="cu-sparkle" style="left:80%; bottom:22%; width:4px;  height:4px;  animation-duration:7.5s; animation-delay:2.2s;"></div>
+    <!-- Sparkle E: far left, higher up -->
+    <div class="cu-sparkle" style="left:4%;  bottom:45%; width:5px;  height:5px;  animation-duration:9s;   animation-delay:3.5s;"></div>
+    <!-- Sparkle F: far right -->
+    <div class="cu-sparkle" style="left:92%; bottom:35%; width:6px;  height:6px;  animation-duration:7s;   animation-delay:1.2s;"></div>
+
+    <div class="container">
+
+      <!-- ── SECTION HEADER ───────────────────────────────────
+           .cu-reveal on each child means they start hidden.
+           JS adds .cu-card-in with staggered delays (0ms, 150ms, 300ms, 450ms).
+           ─────────────────────────────────────────────────── -->
+      <div class="cu-header">
+        <!-- Eyebrow — matches style of other sections on the page -->
+        <div class="section-label cu-reveal" style="transition-delay:0ms;">✦ Find Us ✦</div>
+
+        <!-- Section title -->
+        <h2 class="section-title cu-reveal" id="cu-heading" style="transition-delay:150ms;">Contact Us</h2>
+
+        <!-- Short subtitle paragraph -->
+        <p class="cu-subtitle cu-reveal" style="transition-delay:300ms;">
+          Join our wizarding community and stay enchanted with the latest
+          updates, announcements, and magic from Hackwarts.
+        </p>
+
+        <!-- Golden divider line -->
+        <hr class="cu-divider cu-reveal" style="transition-delay:450ms;" />
+      </div><!-- /cu-header -->
+
+
+      <!-- ── SOCIAL CARDS GRID ─────────────────────────────────
+           Three clickable cards — each is a full <a> link.
+
+           Structure of each card:
+             <a class="cu-card [platform]" href="...">
+               <div class="cu-icon-ring">  ← brand icon circle
+               <h3 class="cu-card-title">  ← platform name
+               <p  class="cu-card-desc">   ← short description
+               <span class="cu-btn">       ← call-to-action pill
+             </a>
+
+           Animation delay is set inline: style="transition-delay: Xms"
+           This creates the left→center→right stagger on reveal.
+           ─────────────────────────────────────────────────── -->
+      <div class="cu-grid">
+
+        <!-- ══════════════════════════════════════════════════
+             CARD 1 — WHATSAPP
+             Platform : WhatsApp
+             Link     : https://chat.whatsapp.com/IdII0P9DM5dApapNIwN27T
+             Color    : Green  (#25d366)
+             Delay    : 100ms  (appears first)
+             TO CHANGE: replace the href value below
+             ══════════════════════════════════════════════════ -->
+        <a
+          href="https://chat.whatsapp.com/IdII0P9DM5dApapNIwN27T"
+          class="cu-card whatsapp"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Join our WhatsApp community group"
+          style="transition-delay: 100ms;"
+        >
+          <!-- WhatsApp brand icon (SVG — no image files needed) -->
+          <div class="cu-icon-ring">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Green circle background -->
+              <circle cx="16" cy="16" r="16" fill="#25d366"/>
+              <!-- WhatsApp phone + speech-bubble path -->
+              <path d="M22.5 9.5C20.8 7.8 18.5 6.8 16 6.8C10.9 6.8 6.8 10.9 6.8 16C6.8 17.7 7.3 19.4 8.2 20.8L6.8 25.2L11.3 23.8C12.7 24.6 14.3 25.1 16 25.1C21.1 25.1 25.2 21 25.2 15.9C25.2 13.4 24.2 11.2 22.5 9.5ZM16 23.6C14.4 23.6 12.9 23.1 11.6 22.3L11.3 22.1L8.7 22.9L9.5 20.4L9.3 20.1C8.4 18.8 7.9 17.2 7.9 15.6C7.9 11.4 11.4 8 15.7 8C17.8 8 19.7 8.8 21.2 10.3C22.7 11.8 23.5 13.7 23.5 15.8C23.9 20.1 20.4 23.6 16 23.6ZM20.3 17.8C20.1 17.7 19 17.1 18.8 17.1C18.6 17 18.5 17 18.4 17.2C18.3 17.4 17.8 17.9 17.7 18.1C17.6 18.2 17.5 18.2 17.3 18.1C16.2 17.6 15.4 17.2 14.6 16C14.5 15.8 14.7 15.8 14.9 15.4C15 15.3 15 15.2 14.9 15.1C14.8 15 14.4 13.9 14.2 13.5C14 13.1 13.8 13.2 13.7 13.2H13.3C13.1 13.2 12.9 13.3 12.8 13.4C12.5 13.7 11.9 14.3 11.9 15.4C11.9 16.5 12.8 17.5 12.9 17.7C13 17.8 14.4 20 16.6 20.9C18.4 21.6 18.8 21.5 19.3 21.4C19.8 21.3 20.9 20.7 21.1 20.1C21.3 19.5 21.3 19 21.2 18.9C21.1 18.8 20.6 18.7 20.3 17.8Z" fill="white"/>
+            </svg>
+          </div>
+
+          <h3 class="cu-card-title">WhatsApp</h3>
+          <p class="cu-card-desc">
+            Join our community group for instant updates,
+            announcements, and wizard banter directly
+            on your phone.
+          </p>
+
+          <!-- CTA pill — entire card is the link, this is decorative -->
+          <span class="cu-btn">
+            Join Group
+            <!-- External link arrow (top-right direction) -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </span>
+
+        </a><!-- /WhatsApp card -->
+
+
+        <!-- ══════════════════════════════════════════════════
+             CARD 2 — LINKEDIN
+             Platform : LinkedIn
+             Link     : https://www.linkedin.com/company/geeksforgeeks-campus-body-rkgit/
+             Color    : Blue (#0a66c2)
+             Delay    : 260ms  (appears second)
+             TO CHANGE: replace the href value below
+             ══════════════════════════════════════════════════ -->
+        <a
+          href="https://www.linkedin.com/company/geeksforgeeks-campus-body-rkgit/"
+          class="cu-card linkedin"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Follow us on LinkedIn"
+          style="transition-delay: 260ms;"
+        >
+          <!-- LinkedIn brand icon (SVG) -->
+          <div class="cu-icon-ring">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Blue circle background -->
+              <circle cx="16" cy="16" r="16" fill="#0a66c2"/>
+              <!-- LinkedIn "in" logotype paths -->
+              <path d="M10.5 13H8V22H10.5V13ZM9.3 11.9C10.1 11.9 10.7 11.3 10.7 10.5C10.7 9.7 10.1 9.1 9.3 9.1C8.5 9.1 7.9 9.7 7.9 10.5C7.9 11.3 8.5 11.9 9.3 11.9ZM24 22H21.5V17.5C21.5 16.1 21.5 14.3 19.6 14.3C17.7 14.3 17.4 15.8 17.4 17.4V22H14.9V13H17.3V14.4C17.7 13.7 18.6 12.9 20 12.9C22.5 12.9 24 14.5 24 17.2V22Z" fill="white"/>
+            </svg>
+          </div>
+
+          <h3 class="cu-card-title">LinkedIn</h3>
+          <p class="cu-card-desc">
+            Follow our official company page for professional
+            updates, event highlights, and career
+            opportunities.
+          </p>
+
+          <span class="cu-btn">
+            Follow Us
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </span>
+
+        </a><!-- /LinkedIn card -->
+
+
+        <!-- ══════════════════════════════════════════════════
+             CARD 3 — INSTAGRAM
+             Platform : Instagram
+             Link     : https://www.instagram.com/gfg_rkgit?igsh=MXQyM3pmZzF6Mm94Mg==
+             Color    : Pink/Purple gradient
+             Delay    : 420ms  (appears last)
+             TO CHANGE: replace the href value below
+             ══════════════════════════════════════════════════ -->
+        <a
+          href="https://www.instagram.com/gfg_rkgit?igsh=MXQyM3pmZzF6Mm94Mg=="
+          class="cu-card instagram"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Follow us on Instagram"
+          style="transition-delay: 420ms;"
+        >
+          <!-- Instagram brand icon (SVG with radial gradient fill) -->
+          <div class="cu-icon-ring">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- SVG gradient definition for Instagram's color -->
+              <defs>
+                <radialGradient id="ig" cx="28%" cy="105%" r="145%">
+                  <stop offset="0%"  stop-color="#fdf497"/>
+                  <stop offset="8%"  stop-color="#fdf497"/>
+                  <stop offset="42%" stop-color="#fd5949"/>
+                  <stop offset="62%" stop-color="#d6249f"/>
+                  <stop offset="92%" stop-color="#285aeb"/>
+                </radialGradient>
+              </defs>
+              <!-- Gradient background circle -->
+              <circle cx="16" cy="16" r="16" fill="url(#ig)"/>
+              <!-- Camera body (rounded square) -->
+              <rect x="9" y="9" width="14" height="14" rx="4" fill="none" stroke="white" stroke-width="1.5"/>
+              <!-- Lens circle -->
+              <circle cx="16" cy="16" r="3.5" fill="none" stroke="white" stroke-width="1.5"/>
+              <!-- Flash dot (top-right corner) -->
+              <circle cx="20.5" cy="11.5" r="1.1" fill="white"/>
+            </svg>
+          </div>
+
+          <h3 class="cu-card-title">Instagram</h3>
+          <p class="cu-card-desc">
+            See behind-the-scenes magic, event photos, and
+            stories from the Hackwarts wizarding
+            world.
+          </p>
+
+          <span class="cu-btn">
+            Follow Us
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </span>
+
+        </a><!-- /Instagram card -->
+
+      </div><!-- /cu-grid -->
+
+
+      <!-- ── BOTTOM TAGLINE ─────────────────────────────────────
+           Appears after the cards via JS (600ms after section enters view).
+           The owl emoji rocks with @keyframes cu-rock.
+           TO CHANGE: edit the text between the <p> tags below.
+           ─────────────────────────────────────────────────── -->
+      <div class="cu-tagline">
+        <p id="cu-tagline">
+          <span class="cu-owl">🦉</span>
+          &nbsp;&nbsp;Owl post accepted &mdash; we reply within 24 hours.
+        </p>
+      </div>
+
+    </div><!-- /container -->
+  </section><!-- /contact-us -->
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       CONTACT US — ANIMATION SCRIPT
+       ════════════════════════════════════════════════════════════
+       HOW IT WORKS:
+         1. An IntersectionObserver watches the #contact-us section.
+         2. When 12% of the section enters the viewport, it fires.
+         3. It adds .cu-card-in to:
+              • Header children (.cu-reveal) — staggered via CSS transition-delay
+              • Each social card (.cu-card)   — staggered via JS setTimeout
+              • The tagline paragraph         — last, after cards
+         4. CSS transitions on those elements do the actual animation.
+         5. The observer stops watching after the first trigger
+            (so it only animates in once, not every scroll).
+
+       HOW TO CHANGE STAGGER TIMING:
+         Edit the CARD_DELAYS array below.
+         [100, 260, 420] means:
+           card 1 appears 100ms after section enters view
+           card 2 appears 260ms after section enters view
+           card 3 appears 420ms after section enters view
+
+       HOW TO CHANGE ANIMATION STYLE:
+         Edit .cu-card { transform / opacity / transition } in the
+         <style> block above. The JS only adds/removes classes —
+         all visual animation is pure CSS.
+       ════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ── Step 1: Element references ─────────────────────────
+         Grab all elements we need to animate:
+           cards   = all three social cards
+           reveals = header children (label, title, subtitle, divider)
+           tagline = bottom owl tagline paragraph
+         ──────────────────────────────────────────────────────── */
+      var section = document.getElementById('contact-us');
+      var cards   = document.querySelectorAll('.cu-card');
+      var reveals = document.querySelectorAll('.cu-reveal');
+      var tagline = document.getElementById('cu-tagline');
+
+      /* ── Step 2: Safety check ───────────────────────────────
+         If any element is missing, exit silently so nothing breaks.
+         ──────────────────────────────────────────────────────── */
+      if (!section || !cards.length) return;
+
+      /* ── Step 3: Stagger delays (ms) ────────────────────────
+         One value per card. Change these to speed up / slow down the stagger.
+         ──────────────────────────────────────────────────────── */
+      var CARD_DELAYS   = [100, 260, 420];  /* card 1, card 2, card 3 */
+      var TAGLINE_DELAY = 640;              /* tagline appears last */
+
+      /* ── Step 4: Reveal callback ────────────────────────────
+         Called by IntersectionObserver when section enters view.
+         ──────────────────────────────────────────────────────── */
+      function onSectionVisible(entries, obs) {
+        entries.forEach(function (entry) {
+
+          /* Only act when section scrolls INTO view */
+          if (!entry.isIntersecting) return;
+
+          /* 4a: Reveal header elements (uses CSS transition-delay on each) */
+          reveals.forEach(function (el) {
+            el.classList.add('cu-card-in');
+          });
+
+          /* 4b: Reveal cards with staggered JS setTimeout */
+          cards.forEach(function (card, i) {
+            setTimeout(function () {
+              card.classList.add('cu-card-in');
+            }, CARD_DELAYS[i] !== undefined ? CARD_DELAYS[i] : i * 160);
+          });
+
+          /* 4c: Reveal tagline after all cards have appeared */
+          setTimeout(function () {
+            if (tagline) tagline.classList.add('cu-card-in');
+          }, TAGLINE_DELAY);
+
+          /* 4d: Stop watching — animate in only once */
+          obs.unobserve(entry.target);
+        });
+      }
+
+      /* ── Step 5: Create IntersectionObserver ────────────────
+         threshold: 0.12 → fires when 12% of section is visible.
+         Increasing this means the animation starts later (further in).
+         Decreasing means it starts earlier (sooner in scroll).
+         ──────────────────────────────────────────────────────── */
+      var observer = new IntersectionObserver(onSectionVisible, {
+        threshold: 0.12
+      });
+
+      /* ── Step 6: Start watching the section ─────────────────
+         ──────────────────────────────────────────────────────── */
+      observer.observe(section);
+
+    }()); /* End IIFE — keeps all variables out of global scope */
+  </script>
+
+
+
+  <!-- ==================================================
+       FOOTER
+       Minimal one-line copyright footer.
+       border-top: faint gold line separating from content.
+       ================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Hackwarts &mdash; GFG Campus Body, RKGIT. Made with magic &amp; code.</p>
+      <!-- TO CHANGE NAME: edit "Vikhyat Srivastava" below -->
+      <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--clr-text-dim); opacity: 0.7; letter-spacing: 0.08em;">
+        Crafted by <span style="color: var(--clr-gold); font-family: 'Cinzel', serif; font-weight: 600;">Vikhyat Srivastava</span>
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ==================================================
+       SOUND TOGGLE BUTTON (fixed bottom-right corner)
+       - Clicking toggles BGM + sound effects on/off
+       - Icon swaps between 🔇 (off) and 🔊 (on)
+       - Wired up in script.js §9 (initSoundToggle)
+       ================================================== -->
+  <button
+    class="sound-toggle"
+    id="soundToggleBtn"
+    aria-label="Toggle ambient sound"
+    title="Toggle magical music"
+  >
+    <span class="sound-icon" aria-hidden="true">🔇</span>
+  </button>
+
+
+  <!-- ==================================================
+       BACKGROUND MUSIC (Harry Potter theme)
+       - loop: repeats forever
+       - preload="auto": browser loads it in the background
+       - Volume set to 0.3 in JS (subtle background level)
+       TO CHANGE MUSIC: replace the src URL below
+       ================================================== -->
+  <audio
+    id="bgmAudio"
+    loop
+    preload="auto"
+    src="https://customer-assets.emergentagent.com/job_potter-theme-landing/artifacts/4r86apx2_harry_potter_theme.mp3"
+  ></audio>
+
+
+  <!-- ==================================================
+       MAIN JAVASCRIPT
+       All cursor / navbar / scroll-reveal / sound logic.
+       See script.js for full commented version.
+       ================================================== -->
+<script src="script.js"></script>
+
+
+</body>
+</html>
