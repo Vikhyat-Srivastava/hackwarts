@@ -1,0 +1,957 @@
+/* ============================================================
+   HACKWARTS — WHERE MAGIC MEETS CODE
+   style.css  |  Landing Page Styles
+   ============================================================
+   Table of Contents:
+     1.  CSS Variables (Design Tokens)
+     2.  Global Reset & Base
+     3.  Custom Cursor Glow
+     4.  Navbar
+     5.  Hero Section
+     6.  Reveal Animations
+     7.  Shared Section Utilities
+     8.  About Section
+     9.  Stages / Timeline Section
+    10.  Sponsor Section
+    11.  Contact Section (original two-column layout)
+    12.  Footer
+    13.  Sound Toggle Button
+    14.  Responsive Design (≤1024px, ≤768px)
+   ============================================================ */
+
+
+/* ─── 1. CSS VARIABLES (Design Tokens) ─────────────────────
+   All colors, spacing, timing and easing are centralised here.
+   Change these values to retheme the entire page instantly.
+   ──────────────────────────────────────────────────────────── */
+:root {
+  /* Color palette */
+  --clr-bg:        #06050e;   /* deep space background */
+  --clr-gold:      #d4af37;   /* Gryffindor / accent gold */
+  --clr-gold-dim:  #9d8133;   /* muted gold (dividers, etc.) */
+  --clr-purple:    #6b3fa0;   /* Ravenclaw / magical purple */
+  --clr-blue:      #0d1b4b;   /* Slytherin / midnight blue */
+  --clr-text:      #e0dfe8;   /* primary body text */
+  --clr-text-dim:  #9896a8;   /* secondary / subdued text */
+
+  /* Spacing scale */
+  --space-xs: 0.5rem;   /*  8px */
+  --space-sm: 1rem;     /* 16px */
+  --space-md: 2rem;     /* 32px */
+  --space-lg: 4rem;     /* 64px */
+  --space-xl: 6rem;     /* 96px */
+
+  /* Layout */
+  --nav-h: 80px;        /* fixed navbar height */
+
+  /* Animation timing */
+  --t-fast: 0.2s;
+  --t-med:  0.4s;
+  --t-slow: 0.8s;
+  --ease-magic: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ─── 2. GLOBAL RESET & BASE ───────────────────────────────
+   Remove browser default margins/paddings and set base
+   typography, background and scrolling behaviour.
+   ──────────────────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* include padding/border in element size */
+}
+
+html {
+  scroll-behavior: smooth;  /* animated anchor-link scrolling */
+  overflow-x: hidden;       /* prevent horizontal scroll bar */
+}
+
+body {
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: 'Raleway', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none; /* hide default OS cursor — replaced by cursor-glow */
+}
+
+/* Main wrapper */
+.App {
+  position: relative;
+  min-height: 100vh;
+}
+
+
+/* ─── 3. CUSTOM CURSOR GLOW ────────────────────────────────
+   A golden radial-gradient circle that follows the mouse.
+   Moved via JavaScript + requestAnimationFrame (script.js §2).
+   ──────────────────────────────────────────────────────────── */
+.cursor-glow {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.7) 0%, transparent 70%);
+  pointer-events: none;       /* must not block clicks */
+  z-index: 9999;
+  transform: translate(-50%, -50%); /* centre glow on cursor point */
+  mix-blend-mode: screen;     /* lighten blend — magical on dark bg */
+  will-change: transform;     /* GPU layer for smooth animation */
+  opacity: 1;
+}
+
+/* Expanded state when hovering interactive elements */
+.cursor-glow.expanded {
+  width: 56px;
+  height: 56px;
+  opacity: 0.85;
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+}
+
+/* Touch devices: hide glow, restore cursor */
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor-glow { display: none; }
+}
+
+
+/* ─── 4. NAVBAR ────────────────────────────────────────────
+   Fixed top bar. .scrolled class is added by JS at 60px scroll
+   triggering a darker background with golden shadow.
+   ──────────────────────────────────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  z-index: 1000;
+  background: rgba(6, 5, 14, 0.25);
+  transition: background var(--t-med) var(--ease-magic),
+              box-shadow var(--t-med) var(--ease-magic),
+              backdrop-filter var(--t-med) var(--ease-magic);
+  backdrop-filter: blur(8px);
+}
+
+/* Scrolled state — JS adds this class when window.scrollY > 60 */
+.navbar.scrolled {
+  background: rgba(6, 5, 14, 0.85);
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.15);
+  backdrop-filter: blur(16px);
+}
+
+/* Centred inner container */
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-md);
+}
+
+/* Logo */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--clr-gold);
+  text-decoration: none;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  transition: color var(--t-fast);
+}
+.nav-logo:hover { color: #f0d878; }
+
+/* Animated lightning bolt icon */
+.logo-sigil {
+  font-size: 2rem;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* Nav link list */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* Nav link with animated underline */
+.nav-link {
+  color: var(--clr-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  transition: color var(--t-fast);
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--clr-gold);
+  transition: width var(--t-fast);
+}
+.nav-link:hover { color: var(--clr-gold); }
+.nav-link:hover::after { width: 100%; }
+
+/* Register CTA in navbar */
+.btn-register {
+  position: relative;
+  padding: 0.65rem 1.75rem;
+  background: var(--clr-gold);
+  color: var(--clr-bg);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+.btn-register:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+}
+.btn-register-text {
+  position: relative;
+  z-index: 2;
+}
+/* Shimmer overlay */
+.btn-register-shimmer {
+  position: absolute;
+  inset: 0;
+  background: var(--clr-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-med) var(--ease-magic);
+}
+.btn-register:hover .btn-register-shimmer { transform: scaleX(1); }
+
+
+/* ─── 5. HERO SECTION ──────────────────────────────────────
+   Full-viewport with layered backgrounds: radial gradients,
+   star field, fog, castle silhouette, and content.
+   ──────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding-top: var(--nav-h); /* push content below fixed navbar */
+}
+
+/* Background gradient layer */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(107, 63, 160, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 30% 80%, rgba(13, 27, 75, 0.35) 0%, transparent 60%),
+    var(--clr-bg);
+}
+
+/* CSS-only twinkling star field */
+.hero-stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(2px 2px at 80% 10%, white, transparent),
+    radial-gradient(1px 1px at 90% 60%, white, transparent);
+  background-size: 200% 200%;
+  animation: twinkle 8s ease-in-out infinite;
+  opacity: 0.6;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 0.3; }
+}
+
+/* Bottom-fade overlay */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, var(--clr-bg) 100%);
+  opacity: 0.7;
+}
+
+/* Animated fog layer */
+.hero-fog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(212, 175, 55, 0.05), transparent);
+  animation: fog-drift 20s ease-in-out infinite;
+}
+.fog-1 { animation-delay: 0s; }
+.fog-2 { animation-delay: -10s; opacity: 0.5; }
+
+@keyframes fog-drift {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(30px); }
+}
+
+/* SVG castle silhouette */
+.castle-silhouette {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  z-index: 2;
+  opacity: 0.15;
+  fill: var(--clr-text);
+}
+
+/* Hero content — above all bg layers */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 1000px;
+  padding: var(--space-md);
+}
+
+.hero-eyebrow {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: var(--clr-gold);
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-sm);
+}
+
+.hero-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 900;
+  color: var(--clr-gold);
+  text-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+  margin-bottom: var(--space-sm);
+  line-height: 0.9;
+  letter-spacing: 0.05em;
+}
+
+.hero-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: var(--clr-text);
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-md);
+}
+
+.hero-desc {
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  color: var(--clr-text-dim);
+  max-width: 700px;
+  margin: 0 auto var(--space-lg);
+  line-height: 1.8;
+}
+
+/* CTA button row */
+.hero-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+/* Primary (gold-filled) button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  background: var(--clr-gold);
+  color: var(--clr-bg);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.5);
+}
+
+/* Secondary (outlined) button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  color: var(--clr-gold);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  border: 2px solid var(--clr-gold);
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.btn-secondary:hover {
+  background: var(--clr-gold);
+  color: var(--clr-bg);
+}
+
+/* Stats bar */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.stat-num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--clr-gold);
+}
+.stat-plus {
+  display: inline;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  color: var(--clr-gold);
+}
+.stat-label {
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  color: var(--clr-text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.stat-divider {
+  width: 1px;
+  height: 50px;
+  background: var(--clr-gold-dim);
+  opacity: 0.3;
+}
+
+/* Scroll-down hint */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--clr-text-dim);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  z-index: 10;
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--clr-gold), transparent);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 1;   transform: translateY(0); }
+  50%       { opacity: 0.3; transform: translateY(10px); }
+}
+
+
+/* ─── 6. REVEAL ANIMATIONS ─────────────────────────────────
+   A) .reveal-text → hero content, fires on load with stagger
+   B) .scroll-reveal → below-fold sections, triggered by JS
+      IntersectionObserver adding .visible class
+   ──────────────────────────────────────────────────────────── */
+
+/* A) Hero reveal */
+.reveal-text {
+  opacity: 0;
+  animation: reveal 1s var(--ease-magic) forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* B) Scroll reveal — .visible added by JS IntersectionObserver */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-magic), transform 0.8s var(--ease-magic);
+}
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ─── 7. SHARED SECTION UTILITIES ──────────────────────────
+   Reusable classes applied to every major content section.
+   ──────────────────────────────────────────────────────────── */
+.section {
+  padding: var(--space-xl) var(--space-sm);
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.9rem;
+  color: var(--clr-gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+}
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--clr-text);
+  margin-bottom: var(--space-sm);
+}
+.section-sub {
+  color: var(--clr-text-dim);
+  max-width: 600px;
+  margin: 0 auto var(--space-lg);
+  font-size: 1.1rem;
+}
+.btn-outline {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border: 2px solid var(--clr-gold);
+  color: var(--clr-gold);
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.btn-outline:hover {
+  background: var(--clr-gold);
+  color: var(--clr-bg);
+}
+.link-arrow {
+  color: var(--clr-gold);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--t-fast);
+}
+.link-arrow:hover { color: #f0d878; }
+
+
+/* ─── 8. ABOUT SECTION ─────────────────────────────────────
+   Two-column grid: text left, 2×2 cards right.
+   ──────────────────────────────────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+.about-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--clr-text-dim);
+}
+.about-lead {
+  font-size: 1.2rem;
+  color: var(--clr-text);
+  margin-bottom: var(--space-sm);
+}
+.about-text p { margin-bottom: var(--space-sm); }
+.about-text em { color: var(--clr-gold); font-style: normal; }
+.about-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+.about-card {
+  padding: var(--space-md);
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 12px;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
+}
+.about-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-xs);
+}
+.about-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--clr-gold);
+  margin-bottom: var(--space-xs);
+}
+.about-card p { font-size: 0.95rem; }
+
+
+/* ─── 9. STAGES / TIMELINE SECTION ────────────────────────
+   Vertical timeline with numbered nodes and content cards.
+   The Grand Finale gets special gold styling.
+   ──────────────────────────────────────────────────────────── */
+.timeline {
+  position: relative;
+  padding-left: var(--space-lg);
+}
+/* Vertical gold track line */
+.timeline-track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 38px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--clr-gold), rgba(212, 175, 55, 0.1));
+}
+.stage-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  align-items: start;
+}
+.stage-node {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--clr-bg);
+  border: 2px solid var(--clr-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.stage-node--final { background: var(--clr-gold); }
+.stage-num {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--clr-gold);
+}
+.stage-node--final .stage-num { color: var(--clr-bg); }
+/* Pulsing ring on each node */
+.stage-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--clr-gold);
+  opacity: 0;
+  animation: stage-ping 2.5s ease-out infinite;
+}
+@keyframes stage-ping {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.5); }
+}
+.stage-card {
+  padding: var(--space-md);
+  background: rgba(212, 175, 55, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 12px;
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+.stage-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.1);
+}
+.stage-card--final {
+  border-color: rgba(212, 175, 55, 0.4);
+  background: rgba(212, 175, 55, 0.08);
+}
+.stage-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-xs);
+}
+.stage-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: var(--clr-gold);
+  margin-bottom: var(--space-xs);
+}
+.stage-desc {
+  color: var(--clr-text-dim);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-sm);
+}
+.stage-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--clr-gold);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.stage-badge.upcoming { opacity: 0.6; }
+.stage-badge.finale {
+  background: var(--clr-gold);
+  color: var(--clr-bg);
+  border-color: var(--clr-gold);
+}
+
+
+/* ─── 10. SPONSOR SECTION ──────────────────────────────────
+   4-column grid. Gold/Silver/Bronze tier badges.
+   ──────────────────────────────────────────────────────────── */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+.sponsor-card {
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 12px;
+  text-align: center;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
+}
+.sponsor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+.sponsor-logo-wrap {
+  width: 100%;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-sm);
+  overflow: visible;         /* do NOT clip images */
+  background: #ffffff;       /* white bg makes logos visible on dark cards */
+  border-radius: 10px;
+  padding: 10px;
+}
+.sponsor-logo {
+  max-width: 150px;
+  max-height: 65px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+  background: #ffffff;
+}
+.sponsor-placeholder {
+  font-size: 2.5rem;
+  color: var(--clr-text-dim);
+  opacity: 0.4;
+}
+.sponsor-name {
+  font-weight: 600;
+  color: var(--clr-text);
+  margin-bottom: var(--space-xs);
+}
+.sponsor-tier {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.gold-tier   { background: rgba(212, 175, 55, 0.2); color: var(--clr-gold); }
+.silver-tier { background: rgba(200,200,200,0.15); color: #c8c8c8; }
+.bronze-tier { background: rgba(180,120, 60,0.15); color: #b4783c; }
+.sponsor-cta {
+  text-align: center;
+  padding: var(--space-md);
+  border: 1px dashed rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+}
+.sponsor-cta p {
+  color: var(--clr-text-dim);
+  margin-bottom: var(--space-sm);
+}
+
+
+/* ─── 11. CONTACT SECTION (original two-column layout) ─────
+   Note: The NEW Contact Us social section added in this update
+   has its own styles in the <style> block inside index.html.
+   ──────────────────────────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+.contact-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--clr-text-dim);
+}
+.contact-lead {
+  font-size: 1.2rem;
+  color: var(--clr-text);
+  margin-bottom: var(--space-sm);
+}
+.contact-sub { margin-bottom: var(--space-md); }
+.contact-card {
+  padding: var(--space-md);
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+}
+.contact-card-inner { text-align: center; }
+.contact-sigil {
+  font-size: 3rem;
+  margin-bottom: var(--space-sm);
+}
+.contact-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  color: var(--clr-gold);
+  margin-bottom: var(--space-xs);
+}
+.contact-card p {
+  color: var(--clr-text-dim);
+  margin-bottom: var(--space-sm);
+}
+.contact-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--clr-gold);
+  margin: var(--space-sm) auto;
+}
+.contact-detail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: var(--space-xs);
+  color: var(--clr-text-dim);
+}
+.contact-detail-icon { font-size: 1.2rem; }
+.contact-detail a {
+  color: var(--clr-gold);
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+.contact-detail a:hover { color: #f0d878; }
+
+
+/* ─── 12. FOOTER ───────────────────────────────────────────
+   Minimal centred footer with a faint gold top-border.
+   ──────────────────────────────────────────────────────────── */
+.footer {
+  padding: var(--space-md);
+  text-align: center;
+  background: rgba(6, 5, 14, 0.8);
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+.footer p {
+  color: var(--clr-text-dim);
+  font-size: 0.9rem;
+}
+
+
+/* ─── 13. SOUND TOGGLE BUTTON ──────────────────────────────
+   Fixed bottom-right button to toggle background music.
+   ──────────────────────────────────────────────────────────── */
+.sound-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--clr-gold);
+  color: var(--clr-bg);
+  border: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+  z-index: 1000;
+  cursor: pointer;
+}
+.sound-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.5);
+}
+
+
+/* ─── 14. RESPONSIVE DESIGN ────────────────────────────────
+   Tablet (≤1024px): collapse two-column grids.
+   Mobile (≤768px): tighten spacing, stack buttons.
+   ──────────────────────────────────────────────────────────── */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .about-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  .about-cards { grid-template-columns: 1fr; }
+  .timeline-track { left: 30px; }
+  .stage-item {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  :root {
+    --space-lg: 3rem;
+    --space-xl: 4rem;
+  }
+  .nav-links { gap: var(--space-sm); }
+  .nav-link { font-size: 0.85rem; }
+  .btn-register { padding: 0.5rem 1.25rem; font-size: 0.85rem; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  .sponsor-grid { grid-template-columns: 1fr; }
+  .sound-toggle {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
